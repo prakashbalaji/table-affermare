@@ -1,20 +1,25 @@
 package com.table.helpers;
 
+import com.table.adapter.TableAdapter;
 import cucumber.api.DataTable;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.table.datasource.JdbiAdapter.HANDLE;
 import static java.util.Objects.isNull;
 
 public class AssertHelper {
 
-    public static void verifyEntriesInTable(String tableName, DataTable table) {
+    private TableAdapter tableAdapter;
+
+    public AssertHelper(TableAdapter tableAdapter) {
+        this.tableAdapter = tableAdapter;
+    }
+
+    public void verifyEntriesInTable(String tableName, DataTable table) {
         List<Map<String, String>> maps = table.asMaps();
-        List<Map<String, Object>> results = getResults(tableName, maps);
+        List<Map<String, Object>> results = tableAdapter.getResults(tableName, maps);
 
         for (Map<String, String> map : maps) {
             if (!rowContainsInTable(map, results)) {
@@ -23,9 +28,9 @@ public class AssertHelper {
         }
     }
 
-    public static void verifyEntriesInTableInOrder(String tableName, DataTable table) {
+    public void verifyEntriesInTableInOrder(String tableName, DataTable table) {
         List<Map<String, String>> maps = table.asMaps();
-        List<Map<String, Object>> results = getResults(tableName, maps);
+        List<Map<String, Object>> results = tableAdapter.getResults(tableName, maps);
 
         if (maps.size() != results.size()) {
             throw new RuntimeException("Number of rows in table does not match with expected rows <" + maps.size() + ":" + results.size() + ">");
@@ -40,23 +45,17 @@ public class AssertHelper {
         }
     }
 
-    public static void verifyForEmptyTable(String tableName) {
-        if (getCount(tableName) != 0) {
+    public void verifyForEmptyTable(String tableName) {
+        if (tableAdapter.getCount(tableName) != 0) {
             throw new RuntimeException("Table is not empty " + tableName);
         }
     }
 
-    private static Long getCount(String tableName) {
-        Collection<Object> values = HANDLE.select("select count(*) from " + tableName).get(0).values();
-        return (Long) values.iterator().next();
-    }
 
-    private static List<Map<String, Object>> getResults(String tableName, List<Map<String, String>> maps) {
-        String columns = StringUtils.join(maps.get(0).keySet().toArray(), ",");
-        return HANDLE.select(String.format("select " + columns + " from " + tableName));
-    }
 
-    private static boolean rowContainsInTable(Map<String, String> map, List<Map<String, Object>> results) {
+
+
+    private boolean rowContainsInTable(Map<String, String> map, List<Map<String, Object>> results) {
         boolean rowMatches = false;
         for (Map<String, Object> result : results) {
 
@@ -68,7 +67,7 @@ public class AssertHelper {
         return rowMatches;
     }
 
-    private static boolean rowMatchesWithTableEntry(Map<String, String> map, Map<String, Object> result) {
+    private boolean rowMatchesWithTableEntry(Map<String, String> map, Map<String, Object> result) {
         int numberOfKeys = map.keySet().size();
         int matchedKeys = 0;
         for (String key : map.keySet()) {

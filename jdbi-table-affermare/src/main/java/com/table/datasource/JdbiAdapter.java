@@ -7,7 +7,9 @@ public class JdbiAdapter {
 
     public static Handle HANDLE;
 
-    public static void initialize(Handle handle){
+    public static void initialize(Handle handle) {
         JdbiAdapter.HANDLE = handle;
     }
+
+
 }

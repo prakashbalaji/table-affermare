@@ -28,7 +28,7 @@ The following examples shows various options with asserting the database tables
                       | 1000    | Martin Fowler |
                       | 1001    | Kent Beck     |
 
-                Then I verify table "authors" is empty
+                Then I verify that the table "authors" is empty
 
 
 Version

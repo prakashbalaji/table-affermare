@@ -10,6 +10,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>jdbi-table-affermare</module>
+        <module>table-driver</module>
+        <module>spring-table-affermare</module>
     </modules>
 
     <properties>
