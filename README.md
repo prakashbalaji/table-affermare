@@ -3,9 +3,16 @@ Table-affermare
 
 Cucumber JVM add on library to verify Database Tables.
 
+Architecture
+=============
+
+![Image of Architecture]
+(arch.png)
+
 Available datasource connectivity -
 
-*        JDBI - register JDBI handle using JDBI.initialize(Handle)
+*        JDBI - register JDBI handle using JdbiAdapter.initialize(Handle)
+*        Spring Adapter - register Spring jdbc template using SpringAdapter.initialize(JdbcTemplate)
 
 To add description
 
