@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
 
 public class AssertHelper {
 
@@ -72,7 +71,7 @@ public class AssertHelper {
         int matchedKeys = 0;
         for (String key : map.keySet()) {
             String expected = map.get(key);
-            String actual = isNull(result.get(key)) ? "null" : result.get(key).toString();
+            String actual = result.get(key) == null ? "null" : result.get(key).toString();
             if (expected.equals(actual)) {
                 matchedKeys++;
             }
