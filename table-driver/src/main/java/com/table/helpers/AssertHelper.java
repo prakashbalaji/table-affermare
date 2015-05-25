@@ -20,6 +20,10 @@ public class AssertHelper {
         List<Map<String, String>> maps = table.asMaps();
         List<Map<String, Object>> results = tableAdapter.getResults(tableName, maps);
 
+        if (maps.size() != results.size()) {
+            throw new RuntimeException("Number of rows in table does not match with expected rows <" + maps.size() + ":" + results.size() + ">");
+        }
+
         for (Map<String, String> map : maps) {
             if (!rowContainsInTable(map, results)) {
                 throw new RuntimeException("Row doesn't match:" + StringUtils.join(map.values(), ',') + " in " + results);
